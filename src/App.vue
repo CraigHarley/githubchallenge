@@ -114,7 +114,7 @@ export default {
             this.$data.currentView = 'single';
         },
         getReadmeForCurrent: function(){
-            let repo = this.$data.selectedRepo;
+            const repo = this.$data.selectedRepo;
             request
                 .get(`https://api.github.com/repos/${repo.owner.login}/${repo.name}/readme`)
                 .then(this.getReadMeSuccess, this.handleError);
@@ -174,9 +174,4 @@ export default {
       }
   }
 }
-
-
-
-
-
 </style>
