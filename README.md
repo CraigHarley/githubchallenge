@@ -1,4 +1,4 @@
-# Degree 53 - Github Challenge
+# Github Coding Challenge
 
 ## Build Setup
 

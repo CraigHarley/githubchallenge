@@ -1,11 +1,10 @@
 <template>
-
-  <div id="app" class="container center-block">
+  <div id="app" class="container-fluid center-block">
     <br>
 
     <div class="row">
       <img src="https://octodex.github.com/images/octobiwan.jpg" height="300px" class="center-block">
-    </div>
+    </div>  
 
     <br>
 
@@ -41,7 +40,7 @@
         </tr>
         </thead>
         <tbody>
-          <tr v-for="repo in results">
+          <tr v-for="repo in results" :key="repo.id">
             <td>{{repo.name}}</td>
             <td>{{repo.owner.login}}</td>
             <td>{{repo.watchers_count}}</td>
@@ -68,18 +67,13 @@
           <span class="fixed-width"><i class="fa fa-area-chart" aria-hidden="true"></i> Size:</span> {{selectedRepo.size}}<br>
           <span class="fixed-width"><i class="fa fa-external-link" aria-hidden="true"></i> Clone Url:</span> git clone {{selectedRepo.clone_url}}<br>
           <span class="fixed-width"><i class="fa fa-code-fork" aria-hidden="true"></i> Default Branch:</span> {{selectedRepo.default_branch}}<br>
-
           <span class="fixed-width"><i class="fa fa-eye" aria-hidden="true"></i> Watchers:</span> {{selectedRepo.watchers}}<br>
           <span class="fixed-width"><i class="fa fa-star" aria-hidden="true"></i>Stargazers:</span> {{selectedRepo.stargazers_count}}<br>
           <span class="fixed-width"><i class="fa fa-code-fork" aria-hidden="true"></i> Forks:</span> {{selectedRepo.forks}}<br>
-
           <span class="fixed-width"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Open Issues:</span> {{selectedRepo.open_issues_count}}<br>
-
-          <br>
-          <span class="fixed-width"><strong><i class="fa fa-thumbs-up" aria-hidden="true"></i>Score:</span> {{selectedRepo.score}}</strong>
+          <span class="fixed-width"><i class="fa fa-thumbs-up" aria-hidden="true"></i>Score:</span> <strong>{{selectedRepo.score}}</strong>
         </p>
-        <h3>Readme: </h3>
-        <p v-html="selectedRepo.readme"></p>
+        <p v-html="selectedRepo.readme" class="well"></p>
       </div>
     </div>
   </div>
@@ -90,6 +84,7 @@ import * as request from 'superagent';
 import * as moment from 'moment';
 import * as showdown from 'showdown';
 const converter = new showdown.Converter();
+converter.setFlavor('github');
 
 export default {
   name: 'app',
@@ -98,19 +93,21 @@ export default {
       search: '',
       results: [],
       selectedRepo: {},
+      viewedRepos: {},
       currentView: 'results'
     }
   },
     methods : {
         showIndividualRepo: function(repo){
-            //lazily convert dates to human format:
-            repo.created_at = moment(repo.created_at).format('MMMM Do YYYY, h:mm:ss a');
-            repo.updated_at = moment(repo.updated_at).format('MMMM Do YYYY, h:mm:ss a');
-
+            if (!this.$data.viewedRepos[repo.id]){
+                //lazily convert dates to human format:
+                repo.created_at = moment(repo.created_at).format('MMMM Do YYYY, h:mm:ss a');
+                repo.updated_at = moment(repo.updated_at).format('MMMM Do YYYY, h:mm:ss a');
+                this.$set(this.$data.viewedRepos, repo.id, true);
+            }
 
             this.$data.selectedRepo = repo;
             this.getReadmeForCurrent();
-
             this.$data.currentView = 'single';
         },
         getReadmeForCurrent: function(){
@@ -147,31 +144,31 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 #app {
-  table {
-    table-style:fixed;
-  }
-  .fixed-width {
-    display: inline-block;
-    min-width:200px;
-    max-width:200px;
-  }
-  /*Search input*/
-  .search-input-group {
-      .input-group-addon {
-        background: white !important;
-      }
-      .form-control{
-        border-right:0;
-        box-shadow:0 0 0;
-        border-color:#ccc;
-        height: 50px;
-      }
-      button {
-        border:0;
-        background:transparent;
-      }
-  }
+    margin: 20px;
 }
-</style>
+
+ table {
+     table-style: fixed;
+}
+ .fixed-width {
+     display: inline-block;
+     min-width:200px;
+     max-width:200px;
+}
+
+ .search-input-group .input-group-addon {
+     background: white !important;
+}
+ .search-input-group .form-control{
+     border-right:0;
+     box-shadow:0 0 0;
+     border-color:#ccc;
+     height: 50px;
+}
+ .search-input-group button {
+     border:0;
+     background:transparent;
+}
+ </style>
