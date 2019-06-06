@@ -1,5 +1,3 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/CraigHarley/githubchallenge.svg?columns=all)](https://waffle.io/CraigHarley/githubchallenge)
-
 # Github Coding Challenge
 
 ## Build Setup
