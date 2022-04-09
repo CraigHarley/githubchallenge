@@ -9,7 +9,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "moment": "^2.17.1",
+    "moment": "^2.29.2",
     "showdown": "^1.6.4",
     "superagent": "^3.5.0",
     "vue": "^2.1.0"
